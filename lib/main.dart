@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'wei.dart';
+import 'second.dart';
 
 void main() => runApp(MyCalculator());
 
@@ -8,13 +10,22 @@ class MyCalculator extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
-      debugShowCheckedModeBanner: false, //يخفي شريط ديباج اللي على الجنب فوق
-
-      title: 'calculator',
+      debugShowCheckedModeBanner: false,
+      title: 'scientific calculator',
       home: Calculator(),
-
-      routes: {"pagetwo": (context) => pagetwo()},
     );
+  }
+}
+
+class FibonacciNumbers {
+  final cache = {0: BigInt.from(1), 1: BigInt.from(1)};
+
+  BigInt get(int i) {
+    if (!cache.containsKey(i)) {
+      cache[i] = get(i - 1) + get(i - 2);
+    }
+
+    return cache[i]!;
   }
 }
 
@@ -27,14 +38,12 @@ class Calculator extends StatefulWidget {
 }
 
 class _Calculator extends State<Calculator> {
-  //لإنه واخد فوق من ستيت فول
-
   String text = '0';
   double numOne = 0;
   double numTwo = 0;
 
   String result = '0';
-  String finalResult = '0'; //النتيجة النهائية
+  String finalResult = '0';
 
   String opr = '';
   String preOpr = '';
@@ -87,11 +96,10 @@ class _Calculator extends State<Calculator> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      // ألأفضل إننا نبدأ بسكاف فولد
       appBar: null,
-      backgroundColor: Colors.black, // الخلفية إسود
+      backgroundColor: Colors.black,
       body: Container(
-        margin: EdgeInsets.only(bottom: 20), //هامش قد إيه
+        margin: EdgeInsets.only(bottom: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
@@ -99,13 +107,9 @@ class _Calculator extends State<Calculator> {
               children: <Widget>[
                 button("...", Color(0xffff9800), 2),
                 Expanded(
-                  // لكي يملأ العمود كله
                   child: Text(
                     text,
-                    style: TextStyle(
-                        // صفات ما في داخل التكست فيلد
-                        color: Colors.white,
-                        fontSize: 30),
+                    style: TextStyle(color: Colors.white, fontSize: 30),
                     maxLines: 1,
                     textAlign: TextAlign.right,
                   ),
@@ -165,7 +169,25 @@ class _Calculator extends State<Calculator> {
                 button("=", Color(0xffff9800), 1),
                 button("<-", Color(0xffff9800), 1)
               ],
-            )
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                button("B", Color(0xffff9800), 1),
+                button("C", Color(0xffff9800), 1),
+                button("D", Color(0xffff9800), 1),
+                button("E", Color(0xffff9800), 1)
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                button("F", Color(0xffff9800), 1),
+                button("W", Color(0xffff9800), 1),
+                button("16d", Color(0xffff9800), 1),
+                button("A", Color(0xffff9800), 1)
+              ],
+            ),
           ],
         ),
       ),
@@ -173,38 +195,41 @@ class _Calculator extends State<Calculator> {
   }
 
   Widget button(String btnTxt, Color color, int num) {
-    // دالة إسمها بوتون تستدعى كل ما أريد أنشي زر
-
     late Container container;
 
     if (num == 0) {
       container = Container(
           padding: EdgeInsets.only(bottom: 10),
-          child: RaisedButton(
+          child: ElevatedButton(
             onPressed: () {
               calculate(btnTxt);
             },
             child: Text(btnTxt, style: TextStyle(fontSize: 30)),
-            color: color,
-            padding: EdgeInsets.only(left: 81, top: 20, right: 81, bottom: 20),
-            shape: StadiumBorder(), //تبقى شكل الاستاد مستطيل مدور
+            style: ElevatedButton.styleFrom(
+              primary: color, // set the background color
+              padding:
+                  EdgeInsets.only(left: 81, top: 20, right: 81, bottom: 20),
+              shape: StadiumBorder(),
+            ),
           ));
     } else if (num == 1) {
       container = Container(
           padding: EdgeInsets.only(bottom: 10),
-          child: RaisedButton(
+          child: ElevatedButton(
             onPressed: () {
               calculate(btnTxt);
             },
             child: Text(btnTxt, style: TextStyle(fontSize: 30)),
-            color: color,
-            padding: EdgeInsets.all(20),
-            shape: CircleBorder(), // يجعل شكل الزر دائري
+            style: ElevatedButton.styleFrom(
+              primary: color, // set the background color
+              padding: EdgeInsets.all(20),
+              shape: CircleBorder(),
+            ),
           ));
     } else if (num == 2) {
       container = Container(
           padding: EdgeInsets.only(bottom: 10),
-          child: RaisedButton(
+          child: ElevatedButton(
             onPressed: () {
               showModalBottomSheet(
                   context: context,
@@ -255,28 +280,79 @@ class _Calculator extends State<Calculator> {
                                   button("tanh-1", Color(0xffff9800), 3)
                                 ],
                               ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  button("Fibonacci", Color(0xffff9800), 4),
+                                  button("sinh-1", Color(0xffff9800), 3),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  button("nCk", Color(0xffff9800), 3),
+                                  button("m", Color(0xffff9800), 3),
+                                  button("8+", Color(0xffff9800), 3),
+                                  button("16+", Color(0xffff9800), 3)
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  button("G", Color(0xffff9800), 3),
+                                  button("m", Color(0xffff9800), 3),
+                                  button("se", Color(0xffff9800), 3),
+                                  button("2+", Color(0xffff9800), 3)
+                                ],
+                              ),
                             ],
                           ),
                         ),
-                        height: 500);
+                        height: 700);
                   });
             },
             child: Text(btnTxt, style: TextStyle(fontSize: 30)),
-            color: color,
-            padding: EdgeInsets.all(20),
-            shape: CircleBorder(), // يجعل شكل الزر دائري
+            style: ElevatedButton.styleFrom(
+              primary: color, // set the background color
+              padding: EdgeInsets.all(20),
+              shape: CircleBorder(),
+            ),
           ));
     } else if (num == 3) {
       container = Container(
           padding: EdgeInsets.only(bottom: 10),
-          child: RaisedButton(
+          child: ElevatedButton(
             onPressed: () {
               calculate(btnTxt);
             },
             child: Text(btnTxt, style: TextStyle(fontSize: 15)),
-            color: color,
-            padding: EdgeInsets.all(20),
-            shape: CircleBorder(), // يجعل شكل الزر دائري
+            style: ElevatedButton.styleFrom(
+              primary: color, // set the background color
+              padding: EdgeInsets.all(20),
+              shape: CircleBorder(),
+            ),
+          ));
+    } else if (num == 4) {
+      container = Container(
+          padding: EdgeInsets.only(bottom: 10),
+          child: ElevatedButton(
+            onPressed: () {
+              FibonacciNumbers? numbers = FibonacciNumbers();
+              numbers.get(numOne.toInt());
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return FibonacciListView(numbers);
+              }));
+            },
+            child: Text(btnTxt, style: TextStyle(fontSize: 15)),
+            style: ElevatedButton.styleFrom(
+              primary: color, // set the background color
+              padding:
+                  EdgeInsets.only(left: 81, top: 20, right: 81, bottom: 20),
+              shape: StadiumBorder(),
+            ),
           ));
     }
 
@@ -309,13 +385,21 @@ class _Calculator extends State<Calculator> {
         case 'pow':
           finalResult = power();
           break;
+        case 'nCk':
+          finalResult = nck();
+          break;
+        case 'm':
+          finalResult = mck();
+          break;
       }
     } else if (txtBtn == '+' ||
         txtBtn == '-' ||
         txtBtn == 'X' ||
         txtBtn == '/' ||
         txtBtn == '=' ||
-        txtBtn == 'pow') {
+        txtBtn == 'pow' ||
+        txtBtn == 'nCk' ||
+        txtBtn == 'm') {
       if (numOne == 0) {
         numOne = double.parse(result);
       } else {
@@ -338,11 +422,16 @@ class _Calculator extends State<Calculator> {
         case 'pow':
           finalResult = power();
           break;
+        case 'nCk':
+          finalResult = nck();
+          break;
+        case 'm':
+          finalResult = mck();
+          break;
       }
 
-      preOpr =
-          opr; //بساوي البري أوبر بالأوبر و بكدة أعرف أشتغل عليهم في سويتش أوبر
-      opr = txtBtn; // بساوي الأوبر بالتكست بوتن
+      preOpr = opr;
+      opr = txtBtn;
       result = '';
     } else if (txtBtn == '%') {
       numOne = double.parse(result);
@@ -359,25 +448,22 @@ class _Calculator extends State<Calculator> {
 
       finalResult = result;
     } else if (txtBtn == 'Sin') {
-      preOpr =
-          opr; //بساوي البري أوبر بالأوبر و بكدة أعرف أشتغل عليهم في سويتش أوبر
-      opr = txtBtn; // بساوي الأوبر بالتكست بوتن
+      preOpr = opr;
+      opr = txtBtn;
       numOne = double.parse(result);
 
       result = (roundDouble(sin(numOne * pi / 180), 5)).toString();
       finalResult = result;
     } else if (txtBtn == 'Cos') {
-      preOpr =
-          opr; //بساوي البري أوبر بالأوبر و بكدة أعرف أشتغل عليهم في سويتش أوبر
-      opr = txtBtn; // بساوي الأوبر بالتكست بوتن
+      preOpr = opr;
+      opr = txtBtn;
       numOne = double.parse(result);
 
       result = (roundDouble(cos(numOne * pi / 180), 5)).toString();
       finalResult = result;
     } else if (txtBtn == 'tan') {
-      preOpr =
-          opr; //بساوي البري أوبر بالأوبر و بكدة أعرف أشتغل عليهم في سويتش أوبر
-      opr = txtBtn; // بساوي الأوبر بالتكست بوتن
+      preOpr = opr;
+      opr = txtBtn;
       numOne = double.parse(result);
 
       result = ('${tan(numOne * pi / 180)}');
@@ -391,7 +477,13 @@ class _Calculator extends State<Calculator> {
         txtBtn == '6' ||
         txtBtn == '7' ||
         txtBtn == '8' ||
-        txtBtn == '9') {
+        txtBtn == '9' ||
+        txtBtn == 'A' ||
+        txtBtn == 'B' ||
+        txtBtn == 'C' ||
+        txtBtn == 'D' ||
+        txtBtn == 'E' ||
+        txtBtn == 'F') {
       if (result == '0')
         result = txtBtn;
       else
@@ -464,6 +556,23 @@ class _Calculator extends State<Calculator> {
       numOne = double.parse(result);
       result = tanh1(numOne).toString();
       finalResult = result;
+    } else if (txtBtn == '16d') {
+      result = (int.parse(result, radix: 16)).toString();
+      finalResult = result;
+    } else if (txtBtn == '2d') {
+      result = (int.parse(result, radix: 2)).toString();
+      finalResult = result;
+    } else if (txtBtn == '8d') {
+      result = (int.parse(result, radix: 8)).toString();
+      finalResult = result;
+    } else if (txtBtn == 'W') {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return Test();
+      }));
+    } else if (txtBtn == 'se') {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return MyHomePage();
+      }));
     }
     setState(() {
       text = finalResult;
@@ -502,26 +611,80 @@ class _Calculator extends State<Calculator> {
     return result;
   }
 
-  String decimalRemove(String _result) {
-    // دالة لأحرك العلامة العشرية
+  String nck() {
+    result = (fact(numOne) / (fact(numTwo) * fact(numOne - numTwo))).toString();
+    numOne = double.parse(result);
+    return result;
+  }
 
+  String mck() {
+    var a = numOne.toInt();
+    var b = numTwo.toInt();
+    result = (a.toRadixString(b)).toString();
+    if (result.contains('a') ||
+        result.contains('b') ||
+        result.contains('c') ||
+        result.contains('d') ||
+        result.contains('e') ||
+        result.contains('f') ||
+        result.contains('A') ||
+        result.contains('B') ||
+        result.contains('C') ||
+        result.contains('D') ||
+        result.contains('E') ||
+        result.contains('F')) {
+      var i = int.parse(result, radix: 16);
+      result = result.toUpperCase();
+      numOne = i.toDouble();
+    } else {
+      numOne = double.parse(result);
+    }
+    return result;
+  }
+
+  String m16() {
+    var a = numOne.toInt();
+    var b = numTwo.toInt();
+    result = (a.toRadixString(b)).toString();
+
+    return result;
+  }
+
+  String decimalRemove(String _result) {
     if (_result.contains('.')) {
-      // لو يحتوي علامة عشرية
       List<String> split = _result.split('.');
       //[11, 0]
-      if (!(int.parse(split[1]) > 0)) // لو كسر إعتيادي عديها لكن لو رقم بصفر
-        return split[
-            0]; //لو أكبر من صفر لو أكبر من صفر مش هيخش هنا لو أصغر من صفر يخش هنا
+      if (!(int.parse(split[1]) > 0)) return split[0];
     }
     return _result;
   }
 }
-//فيه 6  صفوف
 
-class pagetwo extends StatelessWidget {
+class FibonacciListView extends StatelessWidget {
+  final FibonacciNumbers numbers;
+  const FibonacciListView(this.numbers);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(backgroundColor: Colors.black), body: Text("page one"));
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Text('Fibonacci List'),
+      ),
+      body: ListView.builder(
+        itemBuilder: (context, i) {
+          return ListTile(
+            title: Text('${numbers.get(i).toString()}'),
+            onTap: () {
+              final snack = SnackBar(
+                content:
+                    Text('${numbers.get(i)} is #$i in the Fibonacci sequence!'),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snack);
+            },
+          );
+        },
+      ),
+    );
   }
 }
