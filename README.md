@@ -28,3 +28,17 @@ samples, guidance on mobile development, and a full API reference.
 git remote set-url origin git@github.com:abdelrahman992-cpu/flutter_calculator.git
 
 لأرفعه بدون توكن
+
+
+
+flutter channel stable
+
+
+
+flutter upgrade
+
+
+
+لتحديث الفلاتر لو نسخة قديمة
+
+
