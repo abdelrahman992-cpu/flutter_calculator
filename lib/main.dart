@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
+
+import 'package:flutter/material.dart';
+
 import 'wei.dart';
 import 'second.dart';
 
@@ -206,7 +208,7 @@ class _Calculator extends State<Calculator> {
             },
             child: Text(btnTxt, style: TextStyle(fontSize: 30)),
             style: ElevatedButton.styleFrom(
-              primary: color, // set the background color
+              backgroundColor: color, // set the background color
               padding:
                   EdgeInsets.only(left: 81, top: 20, right: 81, bottom: 20),
               shape: StadiumBorder(),
@@ -221,7 +223,7 @@ class _Calculator extends State<Calculator> {
             },
             child: Text(btnTxt, style: TextStyle(fontSize: 30)),
             style: ElevatedButton.styleFrom(
-              primary: color, // set the background color
+              backgroundColor: color, // set the background color
               padding: EdgeInsets.all(20),
               shape: CircleBorder(),
             ),
@@ -316,7 +318,7 @@ class _Calculator extends State<Calculator> {
             },
             child: Text(btnTxt, style: TextStyle(fontSize: 30)),
             style: ElevatedButton.styleFrom(
-              primary: color, // set the background color
+              backgroundColor: color, // set the background color
               padding: EdgeInsets.all(20),
               shape: CircleBorder(),
             ),
@@ -330,7 +332,7 @@ class _Calculator extends State<Calculator> {
             },
             child: Text(btnTxt, style: TextStyle(fontSize: 15)),
             style: ElevatedButton.styleFrom(
-              primary: color, // set the background color
+              backgroundColor: color, // set the background color
               padding: EdgeInsets.all(20),
               shape: CircleBorder(),
             ),
@@ -348,7 +350,7 @@ class _Calculator extends State<Calculator> {
             },
             child: Text(btnTxt, style: TextStyle(fontSize: 15)),
             style: ElevatedButton.styleFrom(
-              primary: color, // set the background color
+              backgroundColor: color, // set the background color
               padding:
                   EdgeInsets.only(left: 81, top: 20, right: 81, bottom: 20),
               shape: StadiumBorder(),
