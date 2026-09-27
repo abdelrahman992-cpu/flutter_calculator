@@ -101,8 +101,9 @@ class _Calculator extends State<Calculator> {
       appBar: null,
       backgroundColor: Colors.black,
       body: Container(
-        margin: EdgeInsets.only(bottom: 20),
-        child: Column(
+  margin: EdgeInsets.only(bottom: 20),
+  child: SingleChildScrollView(
+    child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Row(
@@ -193,6 +194,7 @@ class _Calculator extends State<Calculator> {
           ],
         ),
       ),
+    )
     );
   }
 
