@@ -11,15 +11,14 @@ class IntegrationScreen extends StatefulWidget {
 }
 
 class _IntegrationScreenState extends State<IntegrationScreen> {
-  int degree = 2;
-  int variableCount = 2;
+int degree = 2;
+final int variableCount = 1;
 
-  late List<TextEditingController> xControllers;
-  late List<TextEditingController> coefficientControllers;
+late List<TextEditingController> coefficientControllers;
 
-  List<List<int>> terms = [];
-  String result = '';
-  String equation = '';
+List<List<int>> terms = [];
+String result = '';
+String equation = '';
 
   @override
   void initState() {
@@ -27,14 +26,14 @@ class _IntegrationScreenState extends State<IntegrationScreen> {
     _initializeFields();
   }
 
-  void _initializeFields() {
-    terms = _generateTerms(variableCount, degree);
+void _initializeFields() {
+  terms = _generateTerms(variableCount, degree);
 
-    coefficientControllers = List.generate(
-      terms.length,
-      (_) => TextEditingController(),
-    );
-  }
+  coefficientControllers = List.generate(
+    terms.length,
+    (_) => TextEditingController(),
+  );
+}
 
   // Generate every polynomial term with total degree <= degree.
   List<List<int>> _generateTerms(int variables, int maxDegree) {
@@ -117,35 +116,70 @@ class _IntegrationScreenState extends State<IntegrationScreen> {
     return '${coefficient.toString()}($variablePart)';
   }
 
-  void _resetModel(int newDegree, int newVariableCount) {
-    for (final controller in xControllers) {
-      controller.dispose();
-    }
-    for (final controller in coefficientControllers) {
-      controller.dispose();
-    }
-
-    setState(() {
-      degree = newDegree;
-      variableCount = newVariableCount;
-      result = '';
-      equation = '';
-      _initializeFields();
-    });
+void _resetModel(int newDegree) {
+  for (final controller in coefficientControllers) {
+    controller.dispose();
   }
 
+  setState(() {
+    degree = newDegree;
+    result = '';
+    equation = '';
+    _initializeFields();
+  });
+}
+void _solvo() {
+  final coefficients = <double>[];
+
+  for (final controller in coefficientControllers) {
+    final value = double.tryParse(controller.text.trim());
+
+    if (value == null || !value.isFinite) {
+      _showError('Enter a valid number for every coefficient.');
+      return;
+    }
+
+    coefficients.add(value);
+  }
+
+  final integralTerms = <String>[];
+
+  // المعاملات مرتبة: الثابت، ثم x، ثم x^2، وهكذا.
+  for (int power = 0; power < coefficients.length; power++) {
+    final c = coefficients[power] / (power + 1);
+
+    if (c == 0) continue;
+
+    final newPower = power + 1;
+    final absC = c.abs();
+
+    final coefficientText = _format(absC);
+
+    final term = newPower == 1
+        ? '${coefficientText}x'
+        : '${coefficientText}x^$newPower';
+
+    if (integralTerms.isEmpty) {
+      integralTerms.add(c < 0 ? '-$term' : term);
+    } else {
+      integralTerms.add(c < 0 ? '- $term' : '+ $term');
+    }
+  }
+
+  final integral = integralTerms.isEmpty
+      ? 'C'
+      : '${integralTerms.join(' ')} + C';
+
+  setState(() {
+    equation = '∫ f(x) dx = $integral';
+    result = 'Integration calculated successfully.';
+  });
+}
   void _calculate() {
     final xValues = <double>[];
     final coefficients = <double>[];
 
-    for (final controller in xControllers) {
-      final value = double.tryParse(controller.text.trim());
-      if (value == null || !value.isFinite) {
-        _showError('Enter a valid number for every variable.');
-        return;
-      }
-      xValues.add(value);
-    }
+
 
     for (final controller in coefficientControllers) {
       final value = double.tryParse(controller.text.trim());
@@ -194,9 +228,7 @@ class _IntegrationScreenState extends State<IntegrationScreen> {
 
   @override
   void dispose() {
-    for (final controller in xControllers) {
-      controller.dispose();
-    }
+
     for (final controller in coefficientControllers) {
       controller.dispose();
     }
@@ -235,44 +267,12 @@ class _IntegrationScreenState extends State<IntegrationScreen> {
             ),
             onChanged: (value) {
               if (value != null) {
-                _resetModel(value, variableCount);
+                _resetModel(value);
               }
             },
           ),
+const SizedBox(height: 24),
 
-          const SizedBox(height: 12),
-
-         
-
-          const SizedBox(height: 24),
-
-          Text(
-            'Input variables (${xControllers.length})',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-
-          ...List.generate(variableCount, (i) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: TextField(
-                controller: xControllers[i],
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                  signed: true,
-                ),
-                decoration: InputDecoration(
-                  labelText: 'Value of x${i + 1}',
-                  border: const OutlineInputBorder(),
-                ),
-              ),
-            );
-          }),
-
-          const SizedBox(height: 16),
 
           Text(
             'Coefficients (${coefficientControllers.length})',
@@ -315,7 +315,7 @@ class _IntegrationScreenState extends State<IntegrationScreen> {
           const SizedBox(height: 16),
 
           ElevatedButton.icon(
-            onPressed: _calculate,
+            onPressed: _solvo,
             icon: const Icon(Icons.calculate),
             label: const Text('Integration'),
             style: ElevatedButton.styleFrom(
