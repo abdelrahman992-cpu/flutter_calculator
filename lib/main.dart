@@ -1,9 +1,9 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-
+import 'regression_screen.dart';
 import 'wei.dart';
-import 'second.dart';
+import 'differentiation_screen.dart';
+import 'integration_screen.dart';
 
 void main() => runApp(MyCalculator());
 
@@ -30,6 +30,29 @@ class FibonacciNumbers {
     return cache[i]!;
   }
 }
+
+class HarmonicNumbers {
+  double get(int n) {
+    double sum = 0.0;
+
+    for (int i = 1; i <= n; i++) {
+      sum += 1.0 / i;
+    }
+
+    return sum;
+  }
+
+  String expression(int n) {
+    if (n <= 0) return '0';
+
+    return List.generate(
+      n,
+      (i) => i == 0 ? '1' : '1/${i + 1}',
+    ).join(' + ');
+  }
+}
+
+
 
 class Calculator extends StatefulWidget {
   @override
@@ -117,8 +140,37 @@ class _Calculator extends State<Calculator> {
                     textAlign: TextAlign.right,
                   ),
                 ),
+                Padding(
+  padding: const EdgeInsets.symmetric(
+    horizontal: 12,
+    vertical: 8,
+  ),),
+Expanded(
+  child: Padding(
+    padding: const EdgeInsets.symmetric(
+      horizontal: 12,
+      vertical: 8,
+    ),
+    child: ElevatedButton.icon(
+      icon: const Icon(Icons.show_chart),
+      label: const Text('Regression Calculator'),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.all(14),
+      ),
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const RegressionScreen(),
+          ),
+        );
+      },
+    ),
+  ),
+),
               ],
-            ),
+  ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -131,7 +183,7 @@ class _Calculator extends State<Calculator> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                button("C", Color(0xffa5a5a5), 1),
+                button("AE", Color(0xffa5a5a5), 1),
                 button("+/-", Color.fromRGBO(165, 165, 165, 1), 1),
                 button("%", Color(0xffa5a5a5), 1),
                 button("/", Color(0xffff9800), 1)
@@ -230,102 +282,108 @@ class _Calculator extends State<Calculator> {
               shape: CircleBorder(),
             ),
           ));
-    } else if (num == 2) {
-      container = Container(
-          padding: EdgeInsets.only(bottom: 10),
-          child: ElevatedButton(
-            onPressed: () {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Container(
-                        color: Colors.black,
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  button("Sin-1", Color(0xffff9800), 3),
-                                  button("Cos-1", Color(0xffff9800), 3),
-                                  button("tan-1", Color(0xffff9800), 3),
-                                  button("pi", Color(0xffff9800), 3)
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  button("!", Color(0xffff9800), 3),
-                                  button("e", Color(0xffff9800), 3),
-                                  button("fay", Color(0xffff9800), 3),
-                                  button("ln", Color(0xffff9800), 3)
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  button("log", Color(0xffff9800), 3),
-                                  button("sinh", Color(0xffff9800), 3),
-                                  button("cosh", Color(0xffff9800), 3),
-                                  button("tanh", Color(0xffff9800), 3)
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  button("|x|", Color(0xffff9800), 3),
-                                  button("sinh-1", Color(0xffff9800), 3),
-                                  button("cosh-1", Color(0xffff9800), 3),
-                                  button("tanh-1", Color(0xffff9800), 3)
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  button("Fibonacci", Color(0xffff9800), 4),
-                                  button("sinh-1", Color(0xffff9800), 3),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  button("nCk", Color(0xffff9800), 3),
-                                  button("m", Color(0xffff9800), 3),
-                                  button("8+", Color(0xffff9800), 3),
-                                  button("16+", Color(0xffff9800), 3)
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  button("G", Color(0xffff9800), 3),
-                                  button("m", Color(0xffff9800), 3),
-                                  button("se", Color(0xffff9800), 3),
-                                  button("2+", Color(0xffff9800), 3)
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        height: 700);
-                  });
-            },
-            child: Text(btnTxt, style: TextStyle(fontSize: 30)),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: color, // set the background color
-              padding: EdgeInsets.all(20),
-              shape: CircleBorder(),
-            ),
-          ));
-    } else if (num == 3) {
+    } 
+else if (num == 2) {
+  container = Container(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: ElevatedButton(
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (sheetContext) {
+            return Container(
+              height: 700,
+              color: Colors.black,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        button("Sin-1", const Color(0xffff9800), 3),
+                        button("Cos-1", const Color(0xffff9800), 3),
+                        button("tan-1", const Color(0xffff9800), 3),
+                        button("pi", const Color(0xffff9800), 3),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        button("!", const Color(0xffff9800), 3),
+                        button("e", const Color(0xffff9800), 3),
+                        button("fay", const Color(0xffff9800), 3),
+                        button("ln", const Color(0xffff9800), 3),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        button("log", const Color(0xffff9800), 3),
+                        button("sinh", const Color(0xffff9800), 3),
+                        button("cosh", const Color(0xffff9800), 3),
+                        button("tanh", const Color(0xffff9800), 3),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        button("|x|", const Color(0xffff9800), 3),
+                        button("sinh-1", const Color(0xffff9800), 3),
+                        button("cosh-1", const Color(0xffff9800), 3),
+                        button("tanh-1", const Color(0xffff9800), 3),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        button("Fibonacci", const Color(0xffff9800), 4),
+                        button("Harmonic", const Color(0xffff9800), 5),
+                      ],
+                    ),
+                       Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        button("Integration", const Color(0xffff9800), 6),
+                        button("Differation", const Color(0xffff9800), 7),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        button("nCk", const Color(0xffff9800), 3),
+                        button("m", const Color(0xffff9800), 3),
+                        button("8+", const Color(0xffff9800), 3),
+                        button("16+", const Color(0xffff9800), 3),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        button("G", const Color(0xffff9800), 3),
+                        button("m", const Color(0xffff9800), 3),
+                        button("se", const Color(0xffff9800), 3),
+                        button("2+", const Color(0xffff9800), 3),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        padding: const EdgeInsets.all(20),
+        shape: const CircleBorder(),
+      ),
+      child: Text(btnTxt, style: const TextStyle(fontSize: 30)),
+    ),
+  );
+}
+else if (num == 3) {
       container = Container(
           padding: EdgeInsets.only(bottom: 10),
           child: ElevatedButton(
@@ -359,12 +417,81 @@ class _Calculator extends State<Calculator> {
             ),
           ));
     }
+else if (num == 5) {
+  container = Container(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: ElevatedButton(
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const HarmonicListView(maxN: 100),
+          ),
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        padding: const EdgeInsets.all(20),
+        shape: const StadiumBorder(),
+      ),
+      child: Text(
+        btnTxt,
+        style: const TextStyle(fontSize: 15),
+      ),
+    ),
+  );
+}
+else if (num == 6) {
+  container = Container(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: ElevatedButton(
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const IntegrationScreen(),
+          ),
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        padding: const EdgeInsets.all(20),
+        shape: const StadiumBorder(),
+      ),
+      child: Text(
+        btnTxt,
+        style: const TextStyle(fontSize: 15),
+      ),
+    ),
+  );
+}
+else if (num == 7) {
+  container = Container(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: ElevatedButton(
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+builder: (context) => const DifferentiationScreen(),
+          ),
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        padding: const EdgeInsets.all(20),
+        shape: const StadiumBorder(),
+      ),
+      child: Text(
+        btnTxt,
+        style: const TextStyle(fontSize: 15),
+      ),
+    ),
+  );
+}
 
     return container;
   }
 
   void calculate(txtBtn) {
-    if (txtBtn == 'C') {
+    if (txtBtn == 'AE') {
       text = '0';
       numOne = 0;
       numTwo = 0;
@@ -573,18 +700,14 @@ class _Calculator extends State<Calculator> {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return Test();
       }));
-    } else if (txtBtn == 'se') {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return MyHomePage();
-      }));
+ 
     }
     setState(() {
       text = finalResult;
     });
   }
 
-/*
-  */
+
   String add() {
     result = (numOne + numTwo).toString();
     numOne = double.parse(result);
@@ -692,3 +815,84 @@ class FibonacciListView extends StatelessWidget {
     );
   }
 }
+
+class HarmonicListView extends StatelessWidget {
+  final int maxN;
+
+  const HarmonicListView({
+    Key? key,
+    this.maxN = 100,
+  }) : super(key: key);
+
+  String formatSum(double value) {
+    return value
+        .toStringAsFixed(6)
+        .replaceFirst(RegExp(r'0+$'), '')
+        .replaceFirst(RegExp(r'\.$'), '');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final numbers = HarmonicNumbers();
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text('Harmonic Series'),
+      ),
+      body: ListView.builder(
+        itemCount: maxN,
+        itemBuilder: (context, index) {
+          final n = index + 1;
+          final sum = numbers.get(n);
+
+          return ListTile(
+            leading: CircleAvatar(child: Text('$n')),
+            title: Text(
+              formatSum(sum),
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            subtitle: Text('Harmonic number $n'),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (dialogContext) => AlertDialog(
+                  title: Text('Harmonic number $n'),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('Sum:'),
+                        SelectableText(
+                          formatSum(sum),
+                          style: const TextStyle(fontSize: 22),
+                        ),
+                        const SizedBox(height: 16),
+                        const Text('Expression:'),
+                        SelectableText(
+                          numbers.expression(n),
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(dialogContext),
+                      child: const Text('Close'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
